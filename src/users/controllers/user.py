@@ -73,7 +73,7 @@ class UserController:
             if not user.check_password(user.password, password):
                 return {"error": True, "msg": "Bad username or password"}
         access_token = create_access_token(identity=user.id, expires_delta=datetime.timedelta(days=180))
-        return {"error": False, "token": access_token}
+        return {"error": False, "data": {"token": access_token}}
 
     @staticmethod
     def confirm(code, user_id, password, password_1):

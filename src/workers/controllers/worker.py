@@ -17,16 +17,17 @@ class WorkerController:
 
     def start_work(self):
         now = datetime.datetime.now(tz=datetime.timezone.utc)
-        start_time = WorkTime(now, self.user.id)
-        db.session.add(start_time)
+        if WorkTime.query.filter(and_(WorkTime.user_id == self.user.id, WorkTime.finish.is_(None))).first():
+            return {'error': True, 'msg': 'User is working'}
+        work_time = WorkTime(now, self.user.id)
+        db.session.add(work_time)
         db.session.commit()
         return {'error': False, 'msg': 'Saved'}
 
     def finish_work(self):
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
         last_row = WorkTime.query.filter(and_(WorkTime.finish.is_(None), WorkTime.user_id == self.user.id)).first()
-        print(last_row)
         if last_row:
-            now = datetime.datetime.now(tz=datetime.timezone.utc)
             last_row.finish = now
             db.session.commit()
             return {'msg': 'Saved', 'error': False}

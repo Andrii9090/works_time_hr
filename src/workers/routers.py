@@ -40,5 +40,13 @@ def records():
     user_id = get_jwt_identity()
     controller = RecordController(user_id)
     data = request.get_json()
-    records = controller.get_records(data['start'], data['end'])
-    return jsonify(records_to_list(records))
+    work_records = controller.get_records(data['start'], data['end'])
+    return jsonify({'error': False, 'data': records_to_list(work_records)})
+
+
+@worker_module.route('/records/chronometer', methods=['GET'])
+@jwt_required()
+def get_chronometer():
+    user_id = get_jwt_identity()
+    controller = RecordController(user_id)
+    return jsonify(controller.get_chronometer())
