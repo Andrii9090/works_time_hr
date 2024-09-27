@@ -62,8 +62,6 @@ class User(db.Model):
             'is_admin': self.is_admin
         }
 
-
-
     def __repr__(self):
         return self.__str__()
 

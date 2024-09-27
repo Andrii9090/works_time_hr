@@ -40,29 +40,6 @@ class UserController:
         else:
             return {'error': True, 'msg': 'User don\'t have permissions'}
 
-    def start_work(self):
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
-        start_time = WorkTime(now, self.user.id)
-        db.session.add(start_time)
-        db.session.commit()
-        return {'error': False, 'msg': 'Saved'}
-
-    def finish_work(self):
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
-        last_row = WorkTime.query.filter(WorkTime.finish.is_(None), WorkTime.user_id == self.user.id).first()
-        if last_row:
-            last_row.finish = now
-            db.session.commit()
-            return {'msg': 'Saved', 'error': False}
-        else:
-            return {'msg': 'Error', 'error': True}
-
-    @staticmethod
-    def add_comment(record_id, comment):
-        last_row = WorkTime.query.filter(WorkTime.id == record_id).first()
-        last_row.comment = comment
-        db.session.commit()
-
     @staticmethod
     def login(email, password, is_admin=False):
         user = User.query.filter_by(email=email).first()

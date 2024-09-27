@@ -8,7 +8,7 @@ user_module = Blueprint('users', __name__, template_folder='templates')
 
 @user_module.route('/', methods=["POST"])
 @jwt_required()
-def create():
+def create_user():
     user_id = get_jwt_identity()
     result = UserController.create_user(user_id, request.get_json())
     return jsonify(result)
@@ -46,17 +46,15 @@ def login_admin():
     return jsonify(UserController.login(email, password, True))
 
 
-@user_module.route('/confirm/<code>', methods=["GET"])
+@user_module.route('/confirm/<code>')
 def confirm(code):
-    user_id, code = code.split('_')
-    return render_template('confirm.html', data={'code': code, 'user_id': user_id})
+    if request.method == 'GET':
+        user_id, code = code.split('_')
+        return render_template('confirm.html', data={'code': code, 'user_id': user_id})
+    if request.method == 'POST':
+        password = request.form.get('password')
+        password_1 = request.form.get('password_1')
+        code = request.form.get('code')
+        user_id = request.form.get('user_id')
 
-
-@user_module.route('/confirm/<code>', methods=["POST"])
-def confirm_user(code):
-    password = request.form.get('password')
-    password_1 = request.form.get('password_1')
-    code = request.form.get('code')
-    user_id = request.form.get('user_id')
-
-    return UserController.confirm(code, user_id, password, password_1)
+        return UserController.confirm(code, user_id, password, password_1)

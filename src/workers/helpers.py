@@ -1,5 +1,4 @@
-import pprint
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 
 def get_time_diff(start, finish):

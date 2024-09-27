@@ -13,4 +13,6 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['FLASK_APP'] = 'workers'
 app.config['DEBUG'] = os.getenv('DEBUG')
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = os.getenv('DEBUG')
+
+
