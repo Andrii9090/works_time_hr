@@ -64,14 +64,19 @@ class UserController:
         db.session.commit()
 
     @staticmethod
-    def login(email, password):
+    def login(email, password, is_admin=False):
         user = User.query.filter_by(email=email).first()
 
         if user is None:
             return {"error": True, "msg": "Bad username or password"}
-        else:
+        if user:
+            if not user.is_active:
+                return {"error": True, "msg": "User is not active"}
+            if is_admin and not user.is_admin:
+                return {"error": True, "msg": "User don't have permissions"}
             if not user.check_password(user.password, password):
                 return {"error": True, "msg": "Bad username or password"}
+
         access_token = create_access_token(identity=user.id, expires_delta=datetime.timedelta(days=180))
         return {"error": False, "data": {"token": access_token}}
 
@@ -88,3 +93,12 @@ class UserController:
             return 'User has been activated'
         else:
             return 'User not found'
+
+    def get_user_info(self):
+        return {'error': False, 'data': self.user.get_user()}
+
+    def update_user(self, data):
+        for key, value in data.items():
+            setattr(self.user, key, value)
+        db.session.commit()
+        return {'error': False, 'data': self.user.get_user()}

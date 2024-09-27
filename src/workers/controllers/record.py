@@ -11,8 +11,8 @@ class RecordController:
         self.user = User.query.filter(User.id == user_id).first()
 
     def get_records(self, day_start, day_end, user_id=None):
-        date_start = datetime.datetime.strptime(day_start, '%d-%m-%Y').date()
-        date_end = datetime.datetime.strptime(day_end, '%d-%m-%Y').date()
+        date_start = datetime.datetime.strptime(day_start, '%d/%m/%Y').date()
+        date_end = datetime.datetime.strptime(day_end, '%d/%m/%Y').date()
         if self.user.is_admin and user_id:
             user_id = int(user_id)
         else:

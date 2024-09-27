@@ -8,6 +8,22 @@ from workers.controllers.worker import WorkerController
 worker_module = Blueprint('workers', __name__)
 
 
+@worker_module.route('/', methods=['GET'])
+@jwt_required()
+def get_workers():
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return controller.get_users()
+
+
+@worker_module.route('/working', methods=['GET'])
+@jwt_required()
+def get_working_users():
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return jsonify(controller.get_working_users())
+
+
 @worker_module.route('/records/start', methods=["GET"])
 @jwt_required()
 def start_work():
@@ -36,11 +52,11 @@ def add_comment():
 
 @worker_module.route('/records', methods=['POST'])
 @jwt_required()
-def records():
+def get_records():
     user_id = get_jwt_identity()
     controller = RecordController(user_id)
     data = request.get_json()
-    work_records = controller.get_records(data['start'], data['end'])
+    work_records = controller.get_records(data['start'], data['end'], data['user_id'])
     return jsonify({'error': False, 'data': records_to_list(work_records)})
 
 
@@ -50,3 +66,35 @@ def get_chronometer():
     user_id = get_jwt_identity()
     controller = RecordController(user_id)
     return jsonify(controller.get_chronometer())
+
+
+@worker_module.route('/<user_id>', methods=['GET'])
+@jwt_required()
+def get_user_info(user_id):
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return controller.get_user_info(user_id)
+
+
+@worker_module.route('/<user_id>', methods=['PATCH'])
+@jwt_required()
+def change_active(user_id):
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return controller.change_active(user_id)
+
+
+@worker_module.route('/<user_id>', methods=['PUT'])
+@jwt_required()
+def update_user(user_id):
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return controller.update_user(user_id, request.get_json())
+
+
+@worker_module.route('/report/<user_id>', methods=['POST'])
+@jwt_required()
+def get_report(user_id):
+    actual_user_id = get_jwt_identity()
+    controller = WorkerController(actual_user_id)
+    return controller.get_report(user_id, request.get_json())

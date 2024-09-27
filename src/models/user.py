@@ -49,6 +49,24 @@ class User(db.Model):
     def check_password(password_hash, password):
         return bcrypt.check_password_hash(password_hash, password)
 
+    def get_user(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'position': self.position,
+            'email': self.email,
+            'phone': self.phone,
+            'document': self.document,
+            'is_active': self.is_active,
+            'is_admin': self.is_admin
+        }
+
+
+
+    def __repr__(self):
+        return self.__str__()
+
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email}'
 
