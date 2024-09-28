@@ -8,7 +8,7 @@ services:
     env_file:
       - src/.env-docker
     volumes:
-      - ./data/postgres/work_time_app:/var/lib/postgresql/data
+      - /var/lib/postgres/worker_app:/var/lib/postgresql/data
     restart: always
   app:
     container_name: app_work_app
