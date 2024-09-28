@@ -26,3 +26,9 @@ For start with Docker Compose this app and PostgreSQL you need:
 ```bash
 docker-compose up -d
 ```
+
+For create tables in DB you need:
+```bash
+alembic revision --autogenerate -m 'init db' #OR TU COMMENT 
+alembic upgrade head
+```
