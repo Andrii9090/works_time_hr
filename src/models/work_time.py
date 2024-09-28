@@ -11,7 +11,7 @@ class WorkTime(db.Model):
     finish: Mapped[datetime.datetime] = mapped_column(nullable=True)
     comment: Mapped[str] = mapped_column(nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
-    user: Mapped['User'] = relationship()
+    user: Mapped['User'] = relationship(viewonly=True)
 
     def __init__(self, date, user_id):
         self.date = date.date()

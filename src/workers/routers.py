@@ -54,7 +54,7 @@ def get_records():
     user_id = get_jwt_identity()
     controller = RecordController(user_id)
     data = request.get_json()
-    work_records = controller.get_records(data['start'], data['end'], data['user_id'])
+    work_records = controller.get_records(data['start'], data['end'], data.get('user_id', None))
     return jsonify({'error': False, 'data': records_to_list(work_records)})
 
 
@@ -62,6 +62,7 @@ def get_records():
 @jwt_required()
 def start_work():
     user_id = get_jwt_identity()
+
     controller = RecordController(user_id)
     return jsonify(controller.start_work())
 

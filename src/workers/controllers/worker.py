@@ -17,8 +17,6 @@ class WorkerController:
         if email:
             self.user = User.query.filter(User.email == email).first()
 
-
-
     @is_admin
     def get_worker_info(self, user_id):
         user = User.query.filter(User.id == user_id).first()

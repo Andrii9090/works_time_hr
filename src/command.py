@@ -2,7 +2,6 @@ import click
 from flask import Blueprint
 
 from app.db import db
-from app.server import app
 from models.user import User
 
 cmd = Blueprint('cmd', __name__)

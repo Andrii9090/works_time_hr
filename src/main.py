@@ -10,6 +10,3 @@ app.register_blueprint(cmd)
 
 
 db.init_app(app=app)
-with app.app_context():
-    # db.drop_all()
-    db.create_all()

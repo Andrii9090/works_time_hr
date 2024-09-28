@@ -1,5 +1,7 @@
 import datetime
 
+from sqlalchemy import and_
+
 from app.db import db
 from models.user import User
 from models.work_time import WorkTime
@@ -7,7 +9,7 @@ from models.work_time import WorkTime
 
 class RecordController:
 
-    def __init__(self, user_id):
+    def     __init__(self, user_id):
         self.user = User.query.filter(User.id == user_id).first()
 
     def get_records(self, day_start, day_end, user_id=None):

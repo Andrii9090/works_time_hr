@@ -11,14 +11,14 @@ from app.addons import bcrypt
 class User(db.Model):
     first_name: Mapped[str]
     last_name: Mapped[str]
-    _password: Mapped[str] = mapped_column(name='password')
+    password: Mapped[str]
     position: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
     phone: Mapped[str] = mapped_column(nullable=False)
     document: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
-    times: Mapped[List['WorkTime']] = relationship()
+    times: Mapped[List['WorkTime']] = relationship(viewonly=True)
 
     def __init__(self, first_name, last_name, position, phone, password, email, document):
         self.first_name = first_name
@@ -27,15 +27,7 @@ class User(db.Model):
         self.phone = phone
         self.email = email
         self.document = document
-        self._password = password
-
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, password):
-        self._password = self.generate_hash_password(password)
+        self.password = self.generate_hash_password(password)
 
     @staticmethod
     def generate_hash_password(password):

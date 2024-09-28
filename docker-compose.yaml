@@ -1,0 +1,23 @@
+services:
+  postgres:
+    container_name: postgres_work_app
+    image: postgres:latest
+    command: -p 5434
+    expose:
+      - 5434
+    env_file:
+      - src/.env-docker
+    volumes:
+      - ./data/postgres/work_time_app:/var/lib/postgresql/data
+    restart: always
+  app:
+    container_name: app_work_app
+    build:
+      context: .
+    ports:
+      - "8000:5000"
+    env_file:
+      - src/.env-docker
+    restart: always
+    depends_on:
+      - postgres

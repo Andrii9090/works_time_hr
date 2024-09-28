@@ -46,7 +46,7 @@ def login_admin():
     return jsonify(UserController.login(email, password, True))
 
 
-@user_module.route('/confirm/<code>')
+@user_module.route('/confirm/<code>', methods=["GET", "POST"])
 def confirm(code):
     if request.method == 'GET':
         user_id, code = code.split('_')
